@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">GymApp</string>
+    <string name="mon_card">Monday</string>
+    <string name="tue_card">Tuesday</string>
+    <string name="wed_card">Wednesday</string>
+    <string name="thu_card">Thursday</string>
+    <string name="fri_card">Friday</string>
+    <string name="sat_card">Saturday</string>
+    <string name="sun_card">Sunday</string>
+    <string name="weather_card">Weather</string>
+</resources>

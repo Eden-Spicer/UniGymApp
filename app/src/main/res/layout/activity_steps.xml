@@ -47,12 +47,36 @@
         android:paddingRight="10dp"
         android:layout_marginBottom="30dp"
         app:showAnimationBehavior="inward"
-        app:showDelay="500"
+        app:showDelay="5000"
         android:max="10000"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:trackCornerRadius="8dp"
         app:trackThickness="24dp" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/step_count_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 / 10000"
+        app:layout_constraintBottom_toTopOf="@+id/step_count_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textStyle="bold"
+        android:textSize="50sp"
+        android:fontFamily="@font/carlito"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/step_count_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Steps Taken"
+        app:layout_constraintBottom_toTopOf="@+id/stepBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="30sp"
+        android:paddingBottom="10dp"
+        android:fontFamily="@font/carlito"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

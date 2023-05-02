@@ -24,7 +24,7 @@ public class StepCountService extends Service implements SensorEventListener {
         super.onCreate();
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null) {
-            stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+            stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR); // Change to TYPE_STEP_DETECTOR
         }
         isSensorAvailable = stepSensor != null;
         if (isSensorAvailable) {
@@ -42,8 +42,10 @@ public class StepCountService extends Service implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        currentStepCount = (int) event.values[0];
-        updateStepCount(currentStepCount);
+        if (event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
+            currentStepCount++;
+            updateStepCount(currentStepCount);
+        }
     }
 
     @Override

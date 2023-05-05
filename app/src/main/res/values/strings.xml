@@ -8,4 +8,5 @@
     <string name="sat_card">Saturday</string>
     <string name="sun_card">Sunday</string>
     <string name="weather_card">Weather</string>
+    <string name="weather_card_text">Could not read weather</string>
 </resources>

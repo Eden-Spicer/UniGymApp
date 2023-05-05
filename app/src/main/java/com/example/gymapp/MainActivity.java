@@ -8,41 +8,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 // Gather Weather
-
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.io.IOException;
-
 // Gather Day
 import java.time.LocalDate;
 import java.time.DayOfWeek;
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 

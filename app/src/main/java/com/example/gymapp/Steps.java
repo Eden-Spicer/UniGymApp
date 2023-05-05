@@ -66,9 +66,17 @@ public class Steps extends AppCompatActivity {
             return false;
         });
 
-        Intent weatherServiceIntent = new Intent(this, WeatherService.class);
-        startService(weatherServiceIntent);
+        new Thread(() -> {
+            Intent weatherServiceIntent = new Intent(this, WeatherService.class);
+            startService(weatherServiceIntent);
+        }).start();
 
+        // Get the step count for today and update the UI
+        int stepCount = getStepCountForToday();
+        updateStepCount(stepCount);
+
+        // Register a broadcast receiver to update the step count when it changes
+        registerReceiver(stepCountReceiver, new IntentFilter("STEP_COUNT_UPDATED"));
     }
 
     private String getCurrentDate() {
@@ -108,7 +116,6 @@ public class Steps extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         registerReceiver(stepCountReceiver, new IntentFilter("STEP_COUNT_UPDATED"));
-
         LocalBroadcastManager.getInstance(this).registerReceiver(weatherUpdateReceiver, new IntentFilter("WEATHER_UPDATED"));
     }
 
@@ -116,7 +123,6 @@ public class Steps extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         unregisterReceiver(stepCountReceiver);
-
         LocalBroadcastManager.getInstance(this).unregisterReceiver(weatherUpdateReceiver);
     }
 

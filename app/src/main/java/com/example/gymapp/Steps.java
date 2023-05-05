@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -155,12 +156,48 @@ public class Steps extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String weatherDescription = intent.getStringExtra("weather_description");
-            updateWeatherCard(weatherDescription);
+            int weatherCode = intent.getIntExtra("weather_code", 0);
+            double temperature = intent.getDoubleExtra("temperature", 0.0);
+            updateWeather(weatherDescription, weatherCode, temperature);
         }
     };
 
-    private void updateWeatherCard(String weatherDescription) {
-        TextView weatherText = findViewById(R.id.weatherText);
-        weatherText.setText(weatherDescription);
+    private void updateWeather(String weatherDescription, int weatherCode, double temperature) {
+        TextView weatherTextView = findViewById(R.id.weatherText);
+        ImageView weatherImageView = findViewById(R.id.weatherImage);
+
+        String capitalizedDescription = weatherDescription.substring(0, 1).toUpperCase() + weatherDescription.substring(1);
+
+        String weatherString = capitalizedDescription + ", " + temperature + "°C";
+        weatherTextView.setText(weatherString);
+
+        int imageResource;
+        switch (weatherCode / 100) {
+            case 2: // Thunderstorm
+                imageResource = R.drawable.thunder_weather;
+                break;
+            case 3: // Drizzle
+            case 5: // Rain
+                imageResource = R.drawable.rainy_weather;
+                break;
+            case 6: // Snow
+                imageResource = R.drawable.snow_weather;
+                break;
+            case 7: // Atmosphere
+                imageResource = R.drawable.foggy_weather;
+                break;
+            case 8: // Clear or Clouds
+                if (weatherCode == 800) {
+                    imageResource = R.drawable.sunny_weather;
+                } else {
+                    imageResource = R.drawable.cloudy_weather;
+                }
+                break;
+            default: // Unknown weather code
+                imageResource = R.drawable.neutral_weather;
+                break;
+        }
+
+        weatherImageView.setImageResource(imageResource);
     }
 }

@@ -38,7 +38,6 @@ public class WeatherService extends IntentService {
         FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Handle the case when permissions are not granted
             return;
         }
         fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -74,10 +73,15 @@ public class WeatherService extends IntentService {
                     try {
                         JSONObject jsonObject = new JSONObject(responseData);
                         String weatherDescription = jsonObject.getJSONArray("weather").getJSONObject(0).getString("description");
+                        int weatherCode = jsonObject.getJSONArray("weather").getJSONObject(0).getInt("id");
+                        double temperature = jsonObject.getJSONObject("main").getDouble("temp");
+                        temperature = Math.round(temperature - 273.15); // Convert from Kelvin to Celsius and round off
 
                         // Send a broadcast to update the CardView in Steps activity
                         Intent updateWeatherIntent = new Intent("WEATHER_UPDATED");
                         updateWeatherIntent.putExtra("weather_description", weatherDescription);
+                        updateWeatherIntent.putExtra("weather_code", weatherCode);
+                        updateWeatherIntent.putExtra("temperature", temperature);
                         LocalBroadcastManager.getInstance(WeatherService.this).sendBroadcast(updateWeatherIntent);
 
                     } catch (JSONException e) {

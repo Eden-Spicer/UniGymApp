@@ -48,12 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
     private MaterialToolbar TopAppBarText;
 
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
-    private FusedLocationProviderClient fusedLocationClient;
-    private static final String OPEN_WEATHER_MAP_API_KEY = "4845d99335c14d6d97bf3e89563d9138";
-    private OkHttpClient httpClient;
-    private ImageView weatherImageView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,102 +140,6 @@ public class MainActivity extends AppCompatActivity {
         return false;
         });
 
-
-        getCurrentLocation();
-    }
-
-    private void getCurrentLocation() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
-            }
-        } else {
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-            fusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                @Override
-                public void onComplete(@NonNull Task<Location> task) {
-                    if (task.isSuccessful()) {
-                        Location location = task.getResult();
-                        if (location != null) {
-                            double latitude = location.getLatitude();
-                            double longitude = location.getLongitude();
-                            fetchWeatherData(latitude, longitude);
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getCurrentLocation();
-            }
-        }
-    }
-
-    private void fetchWeatherData(double latitude, double longitude) {
-        String url = "https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&units=metric&appid=" + OPEN_WEATHER_MAP_API_KEY;
-        httpClient = new OkHttpClient();
-        Request request = new Request.Builder().url(url).build();
-
-        httpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseBody = response.body().string();
-                    Log.d("API Response", responseBody); // log the JSON response to the console
-                    try {
-                        JSONObject jsonResponse = new JSONObject(responseBody);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                updateImageViewWithWeatherData(jsonResponse);
-                            }
-                        });
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Log.e("fetchWeatherData", "Response is not successful. Code: " + response.code());
-                }
-            }
-        });
-    }
-
-    private void updateImageViewWithWeatherData(JSONObject jsonResponse) {
-        try {
-            JSONObject weather = jsonResponse.getJSONArray("weather").getJSONObject(0);
-            String iconCode = weather.getString("icon");
-            String weatherCode = weather.getString("id");
-
-            // Map weather codes to corresponding image resource IDs
-            HashMap<String, Integer> weatherImages = new HashMap<>();
-            weatherImages.put("800", R.drawable.monkey);
-            // Add more mappings for other weather codes here
-
-            // Update the ImageView with the corresponding image resource ID
-            weatherImageView = findViewById(R.id.mondayImage);
-            if (weatherImages.containsKey(weatherCode)) {
-                int imageResourceId = weatherImages.get(weatherCode);
-                weatherImageView.setImageResource(imageResourceId);
-            } else {
-                // Use a default image if no mapping is found for the weather code
-                weatherImageView.setImageResource(R.drawable.fitness);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     private void showNameDialog() {

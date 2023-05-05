@@ -117,6 +117,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/weather_card_text"
+                    android:textStyle="bold"
                     android:textAppearance="?attr/textAppearanceTitleLarge" />
             </LinearLayout>
         </LinearLayout>

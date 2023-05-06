@@ -3,16 +3,20 @@ package com.example.gymapp;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 // Gather Weather
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -33,13 +37,13 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavMenu = findViewById(R.id.bottom_navigation);
 
-        CardView mondayCard = findViewById(R.id.mondayCard);
-        CardView tuesdayCard = findViewById(R.id.tuesdayCard);
-        CardView wednesdayCard = findViewById(R.id.wednesdayCard);
-        CardView thursdayCard = findViewById(R.id.thursdayCard);
-        CardView fridayCard = findViewById(R.id.fridayCard);
-        CardView saturdayCard = findViewById(R.id.saturdayCard);
-        CardView sundayCard = findViewById(R.id.sundayCard);
+        MaterialCardView mondayCard = findViewById(R.id.mondayCard);
+        MaterialCardView tuesdayCard = findViewById(R.id.tuesdayCard);
+        MaterialCardView wednesdayCard = findViewById(R.id.wednesdayCard);
+        MaterialCardView thursdayCard = findViewById(R.id.thursdayCard);
+        MaterialCardView fridayCard = findViewById(R.id.fridayCard);
+        MaterialCardView saturdayCard = findViewById(R.id.saturdayCard);
+        MaterialCardView sundayCard = findViewById(R.id.sundayCard);
 
         // Converting dp to px
 

@@ -10,4 +10,9 @@
     <string name="weather_card">Weather</string>
     <string name="weather_card_text">Could not read weather</string>
     <string name="create_workout">Create workout button</string>
+    <string name="create_exercise_dialog_cancel_button">Cancel</string>
+    <string name="weight">%1$.2fKg</string>
+    <string name="create_exercise_dialog_create_button">Create Exercise</string>
+    <string name="create_exercise_dialog_title">Enter Exercise Details</string>
+    <string name="create_exercise_dialog_error_message">Please fill in all fields.</string>
 </resources>

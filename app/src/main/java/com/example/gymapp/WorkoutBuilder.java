@@ -1,8 +1,11 @@
 package com.example.gymapp;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +28,10 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +39,9 @@ public class WorkoutBuilder extends Fragment {
 
     private List<Exercise> exercises = new ArrayList<>();
     private String dayOfWeek = "";
+    private static final String SHARED_PREFS = "user_info";
+    private static final String EXERCISES_KEY = "exercises_key";
+    private static final String WORKOUT_DATA_KEY = "workout_data";
 
     public WorkoutBuilder(String dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
@@ -46,6 +55,12 @@ public class WorkoutBuilder extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            Gson gson = new Gson();
+            String jsonExercises = savedInstanceState.getString(EXERCISES_KEY, null);
+            Type type = new TypeToken<ArrayList<Exercise>>() {}.getType();
+            exercises = gson.fromJson(jsonExercises, type);
+        }
     }
 
     @Override
@@ -59,6 +74,7 @@ public class WorkoutBuilder extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Toolbar toolbar = view.findViewById(R.id.topAppBar);
+        Log.d("WorkoutBuilder", "onViewCreated()");
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,8 +85,80 @@ public class WorkoutBuilder extends Fragment {
         });
 
         FloatingActionButton addWorkoutFab = view.findViewById(R.id.addWorkout);
-        addWorkoutFab.setOnClickListener(v -> showExerciseDialog()
-        );
+        addWorkoutFab.setOnClickListener(v -> showExerciseDialog());
+
+        if (exercises != null && !exercises.isEmpty()) {
+            for (Exercise exercise : exercises) {
+                addExerciseToWorkout(exercise);
+            }
+        } else {
+            loadExercises();
+        }
+
+        Log.d("WorkoutBuilder", "loadExercises()");
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Gson gson = new Gson();
+        String jsonExercises = gson.toJson(exercises);
+        outState.putString(EXERCISES_KEY, jsonExercises);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState == null) {
+            // Load saved exercises only if savedInstanceState is null,
+            // otherwise the exercises will be restored from savedInstanceState
+            loadExercises();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveExercises();
+    }
+
+    private void saveExercises() {
+        Log.d("WorkoutBuilder", "saveExercises()");
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String jsonExercises = gson.toJson(exercises);
+        editor.putString(dayOfWeek, jsonExercises);
+        editor.apply();
+        Log.d("WorkoutBuilder", "JSON Exercises: " + jsonExercises);
+        Log.d("WorkoutBuilder", "Saved exercises to key: " + dayOfWeek);
+    }
+
+    private boolean isExercisesLoaded = false;
+
+    private void loadExercises() {
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString(dayOfWeek, null);
+        Type type = new TypeToken<ArrayList<Exercise>>() {}.getType();
+
+        List<Exercise> loadedExercises = gson.fromJson(json, type);
+
+        if (loadedExercises != null) {
+            List<Exercise> exercisesToAdd = new ArrayList<>();
+            for (Exercise exercise : loadedExercises) {
+                if (!exercises.contains(exercise)) {
+                    exercisesToAdd.add(exercise);
+                }
+            }
+            exercises.addAll(exercisesToAdd);
+            Log.d("WorkoutBuilder", "Loaded exercises: " + exercises);
+            for (Exercise exercise : exercisesToAdd) {
+                addExerciseToWorkout(exercise);
+            }
+        } else {
+            Log.d("WorkoutBuilder", "No saved exercises found");
+        }
     }
 
     private void showExerciseDialog() {
@@ -101,6 +189,9 @@ public class WorkoutBuilder extends Fragment {
                     Exercise exercise = new Exercise(exerciseName, exerciseWeight, exerciseRepetitions);
                     exercises.add(exercise);
                     addExerciseToWorkout(exercise);
+
+                    // Save exercises after adding a new one
+                    saveExercises();
                 })
                 .setNegativeButton(R.string.create_exercise_dialog_cancel_button, null);
 
@@ -109,6 +200,8 @@ public class WorkoutBuilder extends Fragment {
     }
 
     private void addExerciseToWorkout(Exercise exercise) {
+
+        Log.d("WorkoutBuilder", "addExerciseToWorkout()");
         // Add the exercise to the list
         exercises.add(exercise);
 
@@ -220,6 +313,8 @@ public class WorkoutBuilder extends Fragment {
             v.startDragAndDrop(null, shadowBuilder, v, 0);
             return true;
         });
+
+        Log.d("WorkoutBuilder", "Added exercise: " + exercise);
 
     }
 }

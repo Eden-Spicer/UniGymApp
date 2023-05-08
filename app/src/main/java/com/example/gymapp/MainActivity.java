@@ -3,6 +3,7 @@ package com.example.gymapp;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -11,9 +12,11 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 // Gather Weather
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
@@ -120,6 +123,13 @@ public class MainActivity extends AppCompatActivity {
         return false;
         });
 
+        mondayCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFullScreenFragment();
+            }
+        });
+
     }
 
     private void showNameDialog() {
@@ -151,5 +161,43 @@ public class MainActivity extends AppCompatActivity {
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
         builder.show();
+    }
+
+    private void openFullScreenFragment() {
+        WorkoutBuilder fullScreenFragment = new WorkoutBuilder();
+
+        // Hide the BottomNavigationView, AppBarLayout, and LinearLayout containing the cards
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        AppBarLayout appBarLayout = findViewById(R.id.topAppBarLayout);
+        LinearLayout cardContainer = findViewById(R.id.cardContainer);
+        bottomNavigationView.setVisibility(View.GONE);
+        appBarLayout.setVisibility(View.GONE);
+        cardContainer.setVisibility(View.GONE);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        // Set custom animations
+        transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
+
+        // Replace the fragment
+        transaction.replace(R.id.fragment_container, fullScreenFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Check if the WorkoutBuilder fragment is visible
+        WorkoutBuilder fullScreenFragment = (WorkoutBuilder) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (fullScreenFragment != null && fullScreenFragment.isVisible()) {
+            // Show the BottomNavigationView, AppBarLayout, and LinearLayout containing the cards
+            BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+            AppBarLayout appBarLayout = findViewById(R.id.topAppBarLayout);
+            LinearLayout cardContainer = findViewById(R.id.cardContainer);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+            appBarLayout.setVisibility(View.VISIBLE);
+            cardContainer.setVisibility(View.VISIBLE);
+        }
+        super.onBackPressed();
     }
 }

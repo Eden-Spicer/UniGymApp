@@ -9,6 +9,5 @@
     <string name="sun_card">Sunday</string>
     <string name="weather_card">Weather</string>
     <string name="weather_card_text">Could not read weather</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="create_workout">Create workout button</string>
 </resources>

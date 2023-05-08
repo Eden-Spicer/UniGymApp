@@ -126,7 +126,14 @@ public class MainActivity extends AppCompatActivity {
         mondayCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFullScreenFragment();
+                openFullScreenFragment("Monday");
+            }
+        });
+
+        tuesdayCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFullScreenFragment("Tuesday");
             }
         });
 
@@ -163,8 +170,8 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private void openFullScreenFragment() {
-        WorkoutBuilder fullScreenFragment = new WorkoutBuilder();
+    private void openFullScreenFragment(String dayOfWeek) {
+        WorkoutBuilder fullScreenFragment = WorkoutBuilder.newInstance(dayOfWeek);
 
         // Hide the BottomNavigationView, AppBarLayout, and LinearLayout containing the cards
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);

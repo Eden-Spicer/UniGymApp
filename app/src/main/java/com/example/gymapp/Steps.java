@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,7 +24,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class Steps extends AppCompatActivity {
@@ -86,8 +89,16 @@ public class Steps extends AppCompatActivity {
     }
 
     private void requestPermissionsIfNeeded() {
+        List<String> permissionsToRequest = new ArrayList<>();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, REQUEST_CODE_PERMISSIONS);
+            permissionsToRequest.add(Manifest.permission.ACTIVITY_RECOGNITION);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissionsToRequest.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+
+        if (!permissionsToRequest.isEmpty()) {
+            ActivityCompat.requestPermissions(this, permissionsToRequest.toArray(new String[0]), REQUEST_CODE_PERMISSIONS);
         } else {
             startStepCountService();
         }
@@ -101,14 +112,24 @@ public class Steps extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE_PERMISSIONS && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // Permission granted
-            startStepCountService();
-        } else {
-            // Permission denied
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Permission denied, pedometer feature won't work.", Snackbar.LENGTH_LONG);
-            snackbar.setAnchorView(R.id.bottom_navigation);
-            snackbar.show();
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            boolean permissionsGranted = true;
+            for (int grantResult : grantResults) {
+                if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                    permissionsGranted = false;
+                    break;
+                }
+            }
+
+            if (permissionsGranted) {
+                // All required permissions granted
+                startStepCountService();
+            } else {
+                // At least one permission denied
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Permission denied, some features won't work.", Snackbar.LENGTH_LONG);
+                snackbar.setAnchorView(R.id.bottom_navigation);
+                snackbar.show();
+            }
         }
     }
 
@@ -164,6 +185,9 @@ public class Steps extends AppCompatActivity {
             String weatherDescription = intent.getStringExtra("weather_description");
             int weatherCode = intent.getIntExtra("weather_code", 0);
             double temperature = intent.getDoubleExtra("temperature", 0.0);
+
+            Log.d("Steps", "Weather update received: description=" + weatherDescription + ", code=" + weatherCode + ", temp=" + temperature);
+
             updateWeather(weatherDescription, weatherCode, temperature);
         }
     };

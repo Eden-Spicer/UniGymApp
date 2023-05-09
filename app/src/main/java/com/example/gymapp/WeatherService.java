@@ -46,8 +46,10 @@ public class WeatherService extends IntentService {
                 if (location != null) {
                     double latitude = location.getLatitude();
                     double longitude = location.getLongitude();
-                    // Fetch the weather data using the latitude and longitude
+                    Log.d("WeatherService", "Location fetched: lat=" + latitude + ", lon=" + longitude);
                     fetchWeatherData(latitude, longitude);
+                } else {
+                    Log.d("WeatherService", "Location is null");
                 }
             }
         });
@@ -64,12 +66,14 @@ public class WeatherService extends IntentService {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 e.printStackTrace();
+                Log.d("WeatherService", "Weather API request failed");
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String responseData = response.body().string();
+                    Log.d("WeatherService", "Weather API response: " + responseData);
                     try {
                         JSONObject jsonObject = new JSONObject(responseData);
                         String weatherDescription = jsonObject.getJSONArray("weather").getJSONObject(0).getString("description");
@@ -86,7 +90,10 @@ public class WeatherService extends IntentService {
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        Log.d("WeatherService", "JSONException while parsing weather API response");
                     }
+                } else {
+                    Log.d("WeatherService", "Weather API response is not successful");
                 }
             }
         });

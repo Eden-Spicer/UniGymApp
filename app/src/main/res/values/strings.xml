@@ -15,4 +15,8 @@
     <string name="create_exercise_dialog_create_button">Create Exercise</string>
     <string name="create_exercise_dialog_title">Enter Exercise Details</string>
     <string name="create_exercise_dialog_error_message">Please fill in all fields.</string>
+    <string name="edit_exercise_dialog_cancel_button">Cancel</string>
+    <string name="edit_exercise_dialog_save_button">Save</string>
+    <string name="edit_exercise_dialog_title">Edit Exercise</string>
+    <string name="edit_exercise_dialog_error_message">Please fill in all fields.</string>
 </resources>

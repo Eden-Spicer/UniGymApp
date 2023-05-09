@@ -87,14 +87,6 @@ public class WorkoutBuilder extends Fragment {
         FloatingActionButton addWorkoutFab = view.findViewById(R.id.addWorkout);
         addWorkoutFab.setOnClickListener(v -> showExerciseDialog());
 
-        if (exercises != null && !exercises.isEmpty()) {
-            for (Exercise exercise : exercises) {
-                addExerciseToWorkout(exercise);
-            }
-        } else {
-            loadExercises();
-        }
-
         Log.d("WorkoutBuilder", "loadExercises()");
     }
 
@@ -110,8 +102,7 @@ public class WorkoutBuilder extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState == null) {
-            // Load saved exercises only if savedInstanceState is null,
-            // otherwise the exercises will be restored from savedInstanceState
+            exercises.clear(); // Clear exercises list before loading exercises
             loadExercises();
         }
     }
@@ -134,7 +125,6 @@ public class WorkoutBuilder extends Fragment {
         Log.d("WorkoutBuilder", "Saved exercises to key: " + dayOfWeek);
     }
 
-    private boolean isExercisesLoaded = false;
 
     private void loadExercises() {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
@@ -203,7 +193,6 @@ public class WorkoutBuilder extends Fragment {
 
         Log.d("WorkoutBuilder", "addExerciseToWorkout()");
         // Add the exercise to the list
-        exercises.add(exercise);
 
         // Create a new MaterialCardView for the exercise
         LayoutInflater inflater = LayoutInflater.from(getActivity());
@@ -231,6 +220,11 @@ public class WorkoutBuilder extends Fragment {
         // Add the card view to the layout
         LinearLayout layout = getView().findViewById(R.id.workout_exercises_layout);
         layout.addView(cardView);
+
+        MaterialButton editButton = cardView.findViewById(R.id.edit_button);
+        editButton.setOnClickListener(view -> {
+            showEditExerciseDialog(exercise, weightTextView, repetitionsTextView);
+        });
 
         MaterialButton deleteButton = cardView.findViewById(R.id.delete_button);
         deleteButton.setOnClickListener(view -> {
@@ -317,4 +311,46 @@ public class WorkoutBuilder extends Fragment {
         Log.d("WorkoutBuilder", "Added exercise: " + exercise);
 
     }
+
+    private void showEditExerciseDialog(Exercise exercise, MaterialTextView weightTextView, MaterialTextView repetitionsTextView) {
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.edit_exercise_dialog, null);
+
+        final EditText exerciseWeightEditText = view.findViewById(R.id.edit_text_exercise_weight);
+        final EditText exerciseRepetitionsEditText = view.findViewById(R.id.edit_text_exercise_repetitions);
+
+        exerciseWeightEditText.setText(String.valueOf(exercise.getWeight()));
+        exerciseRepetitionsEditText.setText(String.valueOf(exercise.getRepetitions()));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setView(view)
+                .setTitle(R.string.edit_exercise_dialog_title)
+                .setPositiveButton(R.string.edit_exercise_dialog_save_button, (dialog, which) -> {
+                    String exerciseWeightStr = exerciseWeightEditText.getText().toString();
+                    String exerciseRepetitionsStr = exerciseRepetitionsEditText.getText().toString();
+
+                    if (exerciseWeightStr.isEmpty() || exerciseRepetitionsStr.isEmpty()) {
+                        Snackbar.make(getView(), R.string.edit_exercise_dialog_error_message, Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    float exerciseWeight = Float.parseFloat(exerciseWeightStr);
+                    int exerciseRepetitions = Integer.parseInt(exerciseRepetitionsStr);
+
+                    exercise.setWeight(exerciseWeight);
+                    exercise.setRepetitions(exerciseRepetitions);
+
+                    String weightText = getString(R.string.weight, exercise.getWeight());
+                    weightText += " x ";
+                    weightTextView.setText(weightText);
+                    repetitionsTextView.setText(String.valueOf(exercise.getRepetitions()));
+
+                    saveExercises();
+                })
+                .setNegativeButton(R.string.edit_exercise_dialog_cancel_button, null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 }

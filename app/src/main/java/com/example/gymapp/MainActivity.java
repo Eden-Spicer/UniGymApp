@@ -137,6 +137,41 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        wednesdayCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFullScreenFragment("Wednesday");
+            }
+        });
+
+        thursdayCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFullScreenFragment("Thursday");
+            }
+        });
+
+        fridayCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFullScreenFragment("Friday");
+            }
+        });
+
+        saturdayCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFullScreenFragment("Saturday");
+            }
+        });
+
+        sundayCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFullScreenFragment("Sunday");
+            }
+        });
+
     }
 
     private void showNameDialog() {

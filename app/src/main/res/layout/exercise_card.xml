@@ -38,23 +38,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-
+            android:paddingRight="8dp"
             android:textAppearance="?attr/textAppearanceHeadline6"
             android:text="Repetitions"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/edit_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:drawablePadding="8dp"
+            android:padding="4dp"
+            app:icon="@drawable/edit"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconSize="24dp"
+            style="?attr/materialIconButtonFilledStyle"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/delete_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center_vertical"
-            android:layout_margin="12dp"
             android:drawablePadding="8dp"
             android:padding="4dp"
             app:icon="@drawable/deletebutt"
             app:iconGravity="textStart"
             app:iconPadding="0dp"
             app:iconSize="24dp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+            style="?attr/materialIconButtonOutlinedStyle"/>
+
 
     </LinearLayout>
 

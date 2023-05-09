@@ -30,6 +30,7 @@ import java.time.DayOfWeek;
 public class MainActivity extends AppCompatActivity {
 
     private MaterialToolbar TopAppBarText;
+    private AlertDialog nameDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,7 +203,16 @@ public class MainActivity extends AppCompatActivity {
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-        builder.show();
+        nameDialog = builder.create();
+        nameDialog.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (nameDialog != null && nameDialog.isShowing()) {
+            nameDialog.dismiss();
+        }
+        super.onDestroy();
     }
 
     private void openFullScreenFragment(String dayOfWeek) {

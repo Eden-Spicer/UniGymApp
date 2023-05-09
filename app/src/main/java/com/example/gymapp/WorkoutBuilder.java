@@ -8,11 +8,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.Toast;
+import com.example.gymapp.R;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -85,7 +88,12 @@ public class WorkoutBuilder extends Fragment {
         });
 
         FloatingActionButton addWorkoutFab = view.findViewById(R.id.addWorkout);
-        addWorkoutFab.setOnClickListener(v -> showExerciseDialog());
+        addWorkoutFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAddExercisePopupMenu(view);
+            }
+        });
 
         Log.d("WorkoutBuilder", "loadExercises()");
     }
@@ -111,6 +119,29 @@ public class WorkoutBuilder extends Fragment {
     public void onPause() {
         super.onPause();
         saveExercises();
+    }
+
+    private void showAddExercisePopupMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(requireContext(), view);
+        popupMenu.getMenuInflater().inflate(R.menu.fab_menu, popupMenu.getMenu());
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.add_custom_exercise:
+                        showExerciseDialog();
+                        return true;
+                    case R.id.add_premade_exercise:
+                        showPremadeExercisesDialog();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+
+        popupMenu.show();
     }
 
     private void saveExercises() {
@@ -152,6 +183,11 @@ public class WorkoutBuilder extends Fragment {
     }
 
     private void showExerciseDialog() {
+        // Show custom exercise dialog directly
+        showCustomExerciseDialog();
+    }
+
+    private void showCustomExerciseDialog() {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.exercise_dialog, null);
 
@@ -187,6 +223,28 @@ public class WorkoutBuilder extends Fragment {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void showPremadeExercisesDialog() {
+        ExerciseDatabaseHelper dbHelper = new ExerciseDatabaseHelper(requireContext());
+        List<Exercise> premadeExercises = dbHelper.getAllPremadeExercises();
+        Log.d("TAG", "Number of premade exercises: " + premadeExercises.size());
+
+        String[] exerciseNames = new String[premadeExercises.size()];
+        for (int i = 0; i < premadeExercises.size(); i++) {
+            exerciseNames[i] = premadeExercises.get(i).getName();
+        }
+
+        AlertDialog.Builder premadeExercisesDialog = new AlertDialog.Builder(requireContext());
+        premadeExercisesDialog.setTitle(R.string.choose_premade_exercise)
+                .setItems(exerciseNames, (innerDialog, index) -> {
+                    Exercise selectedExercise = premadeExercises.get(index);
+                    exercises.add(selectedExercise);
+                    addExerciseToWorkout(selectedExercise);
+                    saveExercises();
+                });
+
+        premadeExercisesDialog.create().show();
     }
 
     private void addExerciseToWorkout(Exercise exercise) {

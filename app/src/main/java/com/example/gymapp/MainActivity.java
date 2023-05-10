@@ -1,12 +1,5 @@
 package com.example.gymapp;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -14,18 +7,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-// Gather Weather
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-
-// Gather Day
-import java.time.LocalDate;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         MaterialCardView saturdayCard = findViewById(R.id.saturdayCard);
         MaterialCardView sundayCard = findViewById(R.id.sundayCard);
 
-        // Converting dp to px
 
         float elevationDp = 8;
         float density = getResources().getDisplayMetrics().density;
@@ -111,11 +102,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         bottomNavMenu.setOnItemSelectedListener(item -> {
-        switch (item.getItemId()) {
-            case R.id.page_1:
-
+            int itemId = item.getItemId();
+            if (itemId == R.id.page_1) {
+                // Do something
                 return true;
-            case R.id.page_2:
+            } else if (itemId == R.id.page_2) {
                 // handle click on new activity icon
                 Intent intent = new Intent(MainActivity.this, Steps.class);
                 startActivity(intent);
@@ -124,54 +115,19 @@ public class MainActivity extends AppCompatActivity {
         return false;
         });
 
-        mondayCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openFullScreenFragment("Monday");
-            }
-        });
+        mondayCard.setOnClickListener(v -> openFullScreenFragment("Monday"));
 
-        tuesdayCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openFullScreenFragment("Tuesday");
-            }
-        });
+        tuesdayCard.setOnClickListener(v -> openFullScreenFragment("Tuesday"));
 
-        wednesdayCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openFullScreenFragment("Wednesday");
-            }
-        });
+        wednesdayCard.setOnClickListener(v -> openFullScreenFragment("Wednesday"));
 
-        thursdayCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openFullScreenFragment("Thursday");
-            }
-        });
+        thursdayCard.setOnClickListener(v -> openFullScreenFragment("Thursday"));
 
-        fridayCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openFullScreenFragment("Friday");
-            }
-        });
+        fridayCard.setOnClickListener(v -> openFullScreenFragment("Friday"));
 
-        saturdayCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openFullScreenFragment("Saturday");
-            }
-        });
+        saturdayCard.setOnClickListener(v -> openFullScreenFragment("Saturday"));
 
-        sundayCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openFullScreenFragment("Sunday");
-            }
-        });
+        sundayCard.setOnClickListener(v -> openFullScreenFragment("Sunday"));
 
     }
 
@@ -190,14 +146,16 @@ public class MainActivity extends AppCompatActivity {
         builder.setView(inputLayout);
 
         builder.setPositiveButton("OK", (dialog, which) -> {
-            String name = input.getText().toString().trim();
-            if (!name.isEmpty()) {
-                TopAppBarText.setSubtitle(String.format("Hello, %s", name + "! Ready for a workout?"));
+            if (input.getText() != null) {
+                String name = input.getText().toString().trim();
+                if (!name.isEmpty()) {
+                    TopAppBarText.setSubtitle(String.format("Hello, %s", name + "! Ready for a workout?"));
 
-                SharedPreferences.Editor editor = getSharedPreferences("user_info", MODE_PRIVATE).edit();
-                editor.putString("user_name", name);
-                editor.putBoolean("first_time", false);
-                editor.apply();
+                    SharedPreferences.Editor editor = getSharedPreferences("user_info", MODE_PRIVATE).edit();
+                    editor.putString("user_name", name);
+                    editor.putBoolean("first_time", false);
+                    editor.apply();
+                }
             }
         });
 

@@ -40,17 +40,14 @@ public class WeatherService extends IntentService {
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-                    Log.d("WeatherService", "Location fetched: lat=" + latitude + ", lon=" + longitude);
-                    fetchWeatherData(latitude, longitude);
-                } else {
-                    Log.d("WeatherService", "Location is null");
-                }
+        fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+            if (location != null) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+                Log.d("WeatherService", "Location fetched: lat=" + latitude + ", lon=" + longitude);
+                fetchWeatherData(latitude, longitude);
+            } else {
+                Log.d("WeatherService", "Location is null");
             }
         });
     }

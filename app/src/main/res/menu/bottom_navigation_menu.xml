@@ -3,12 +3,12 @@
         android:id="@+id/page_1"
         android:enabled="true"
         android:icon="@drawable/fitness"
-        android:title="Home"
+        android:title="@string/home"
         />
     <item
         android:id="@+id/page_2"
         android:enabled="true"
         android:icon="@drawable/running_icon"
-        android:title="Steps"/>
+        android:title="@string/steps"/>
 
 </menu>

@@ -3,20 +3,17 @@
 
     <item
         android:id="@+id/edit"
-        android:title="edit"
-        android:contentDescription="edit"
+        android:title="@string/edit"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/favorite"
-        android:title="favorite"
-        android:contentDescription="favorite"
+        android:title="@string/favorite"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/more"
-        android:title="more"
-        android:contentDescription="more"
+        android:title="@string/more"
         app:showAsAction="never" />
 
 </menu>

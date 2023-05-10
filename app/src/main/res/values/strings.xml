@@ -21,4 +21,19 @@
     <string name="edit_exercise_dialog_error_message">Please fill in all fields.</string>
     <string name="choose_exercise_type">Choose Exercise Type</string>
     <string name="choose_premade_exercise">Choose a premade exercise:</string>
+    <string name="step_count">0 / 10000</string>
+    <string name="steps_taken">Steps taken</string>
+    <string name="hint_weight">Weight</string>
+    <string name="repetitions">Repetitions</string>
+    <string name="delete_button_description">Delete button</string>
+    <string name="edit_button_description">Edit exercise button</string>
+    <string name="exercise_name">Exercise Name</string>
+    <string name="workout_holder">Workout holder</string>
+    <string name="home">Home</string>
+    <string name="steps">Steps</string>
+    <string name="add_premade_exercise">Add Premade Exercise</string>
+    <string name="add_custom_exercise">Add Custom Exercise</string>
+    <string name="edit">edit</string>
+    <string name="favorite">favorite</string>
+    <string name="more">more</string>
 </resources>

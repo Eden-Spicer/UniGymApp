@@ -1,7 +1,6 @@
 package com.example.gymapp;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,20 +13,16 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
-import android.widget.Toast;
-import com.example.gymapp.R;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.color.MaterialColors;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textview.MaterialTextView;
@@ -44,15 +39,13 @@ public class WorkoutBuilder extends Fragment {
     private String dayOfWeek = "";
     private static final String SHARED_PREFS = "user_info";
     private static final String EXERCISES_KEY = "exercises_key";
-    private static final String WORKOUT_DATA_KEY = "workout_data";
 
     public WorkoutBuilder(String dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
     }
 
     public static WorkoutBuilder newInstance(String dayOfWeek) {
-        WorkoutBuilder fragment = new WorkoutBuilder(dayOfWeek);
-        return fragment;
+        return new WorkoutBuilder(dayOfWeek);
     }
 
     @Override
@@ -78,22 +71,15 @@ public class WorkoutBuilder extends Fragment {
 
         Toolbar toolbar = view.findViewById(R.id.topAppBar);
         Log.d("WorkoutBuilder", "onViewCreated()");
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() != null) {
-                    getActivity().onBackPressed();
-                }
+
+        toolbar.setNavigationOnClickListener(v -> {
+            if (getActivity() != null) {
+                getActivity().onBackPressed();
             }
         });
 
         FloatingActionButton addWorkoutFab = view.findViewById(R.id.addWorkout);
-        addWorkoutFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAddExercisePopupMenu(view);
-            }
-        });
+        addWorkoutFab.setOnClickListener(this::showAddExercisePopupMenu);
 
         Log.d("WorkoutBuilder", "loadExercises()");
     }
@@ -125,21 +111,18 @@ public class WorkoutBuilder extends Fragment {
         PopupMenu popupMenu = new PopupMenu(requireContext(), view);
         popupMenu.getMenuInflater().inflate(R.menu.fab_menu, popupMenu.getMenu());
 
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.add_custom_exercise:
-                        showExerciseDialog();
-                        return true;
-                    case R.id.add_premade_exercise:
-                        showPremadeExercisesDialog();
-                        return true;
-                    default:
-                        return false;
-                }
+        popupMenu.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.add_custom_exercise) {
+                showExerciseDialog();
+                return true;
+            } else if (itemId == R.id.add_premade_exercise) {
+                showPremadeExercisesDialog();
+                return true;
             }
+            return false;
         });
+
 
         popupMenu.show();
     }
@@ -280,82 +263,75 @@ public class WorkoutBuilder extends Fragment {
         layout.addView(cardView);
 
         MaterialButton editButton = cardView.findViewById(R.id.edit_button);
-        editButton.setOnClickListener(view -> {
-            showEditExerciseDialog(exercise, weightTextView, repetitionsTextView);
-        });
+        editButton.setOnClickListener(view -> showEditExerciseDialog(exercise, weightTextView, repetitionsTextView));
 
         MaterialButton deleteButton = cardView.findViewById(R.id.delete_button);
-        deleteButton.setOnClickListener(view -> {
-            new AlertDialog.Builder(getContext())
-                    .setTitle("Delete Exercise")
-                    .setMessage("Are you sure you want to delete this exercise?")
-                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                        // Delete the exercise from the list and remove the card view
-                        exercises.remove(exercise);
-                        layout.removeView(cardView);
-                    })
-                    .setNegativeButton(android.R.string.no, null)
-                    .show();
-        });
+        deleteButton.setOnClickListener(view -> new AlertDialog.Builder(getContext())
+                .setTitle("Delete Exercise")
+                .setMessage("Are you sure you want to delete this exercise?")
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    // Delete the exercise from the list and remove the card view
+                    exercises.remove(exercise);
+                    layout.removeView(cardView);
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .show());
 
-        cardView.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                switch (event.getAction()) {
-                    case DragEvent.ACTION_DRAG_STARTED:
-                        // Do nothing
-                        break;
-                    case DragEvent.ACTION_DRAG_ENTERED:
-                    case DragEvent.ACTION_DRAG_EXITED:
-                    case DragEvent.ACTION_DRAG_ENDED:
-                        // Unhighlight the card view when the drag event ends
-                        // Unhighlight the card view when the drag event exits the drop zone
-                        // Highlight the card view to indicate the drop zone
-                        cardView.setCardBackgroundColor(MaterialColors.getColor(cardView, com.google.android.material.R.attr.colorSurface));
-                        break;
-                    case DragEvent.ACTION_DROP:
-                        // Get the item being dragged and its original parent view
-                        View dragView = (View) event.getLocalState();
-                        ViewGroup parent = (ViewGroup) dragView.getParent();
+        cardView.setOnDragListener((v, event) -> {
+            switch (event.getAction()) {
+                case DragEvent.ACTION_DRAG_STARTED:
+                    // Do nothing
+                    break;
+                case DragEvent.ACTION_DRAG_ENTERED:
+                case DragEvent.ACTION_DRAG_EXITED:
+                case DragEvent.ACTION_DRAG_ENDED:
+                    // Unhighlight the card view when the drag event ends
+                    // Unhighlight the card view when the drag event exits the drop zone
+                    // Highlight the card view to indicate the drop zone
+                    cardView.setCardBackgroundColor(MaterialColors.getColor(cardView, com.google.android.material.R.attr.colorSurface));
+                    break;
+                case DragEvent.ACTION_DROP:
+                    // Get the item being dragged and its original parent view
+                    View dragView = (View) event.getLocalState();
+                    ViewGroup parent = (ViewGroup) dragView.getParent();
 
-                        // Remove the item from its original parent and add it to the new parent
-                        parent.removeView(dragView);
+                    // Remove the item from its original parent and add it to the new parent
+                    parent.removeView(dragView);
 
-                        // Find the position to insert the dragged view
-                        int index = -1;
-                        for (int i = 0; i < parent.getChildCount(); i++) {
-                            View child = parent.getChildAt(i);
-                            if (child != cardView) {
-                                // Check if the dragged view is being dropped above or below this child view
-                                if (event.getY() < child.getTop() + child.getHeight() / 2) {
-                                    index = i;
-                                    break;
-                                }
+                    // Find the position to insert the dragged view
+                    int index = -1;
+                    for (int i = 0; i < parent.getChildCount(); i++) {
+                        View child = parent.getChildAt(i);
+                        if (child != cardView) {
+                            // Check if the dragged view is being dropped above or below this child view
+                            if (event.getY() < child.getTop() + child.getHeight() / 2) {
+                                index = i;
+                                break;
                             }
                         }
+                    }
 
-                        // Add the dragged view at the correct position
-                        if (index != -1) {
-                            parent.addView(dragView, index);
-                        } else {
-                            parent.addView(dragView);
-                        }
+                    // Add the dragged view at the correct position
+                    if (index != -1) {
+                        parent.addView(dragView, index);
+                    } else {
+                        parent.addView(dragView);
+                    }
 
-                        // Make the item visible
-                        dragView.setVisibility(View.VISIBLE);
+                    // Make the item visible
+                    dragView.setVisibility(View.VISIBLE);
 
-                        // Update the order of the exercises in the workout list
-                        List<Exercise> newExercisesOrder = new ArrayList<>();
-                        for (int i = 0; i < parent.getChildCount(); i++) {
-                            Exercise exercise = (Exercise) parent.getChildAt(i).getTag();
-                            newExercisesOrder.add(exercise);
-                        }
-                        exercises.clear();
-                        exercises.addAll(newExercisesOrder);
-                        break;
-                }
-                return true;
+                    // Update the order of the exercises in the workout list
+                    List<Exercise> newExercisesOrder = new ArrayList<>();
+                    for (int i = 0; i < parent.getChildCount(); i++) {
+                        Exercise exercise1 = (Exercise) parent.getChildAt(i).getTag();
+                        newExercisesOrder.add(exercise1);
+                    }
+                    exercises.clear();
+                    exercises.addAll(newExercisesOrder);
+                    break;
             }
+            return true;
         });
 
 

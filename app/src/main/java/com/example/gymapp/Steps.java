@@ -35,7 +35,7 @@ public class Steps extends AppCompatActivity {
     private ProgressBar progressBar;
     private static final int REQUEST_CODE_PERMISSIONS = 100;
 
-    private BroadcastReceiver stepCountReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver stepCountReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             int currentStepCount = intent.getIntExtra("step_count", 0);
@@ -57,14 +57,14 @@ public class Steps extends AppCompatActivity {
         botNavMenu.setSelectedItemId(R.id.page_2);
 
         botNavMenu.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.page_2:
-                    return true;
-                case R.id.page_1:
-                    // handle click on new activity icon
-                    Intent intent1 = new Intent(Steps.this, MainActivity.class);
-                    startActivity(intent1);
-                    return true;
+            int itemId = item.getItemId();
+            if (itemId == R.id.page_2) {
+                return true;
+            } else if (itemId == R.id.page_1) {
+                // handle click on new activity icon
+                Intent intent1 = new Intent(Steps.this, MainActivity.class);
+                startActivity(intent1);
+                return true;
             }
             return false;
         });
@@ -179,7 +179,7 @@ public class Steps extends AppCompatActivity {
         progressBar.setProgress(currentStepCount);
     }
 
-    private BroadcastReceiver weatherUpdateReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver weatherUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String weatherDescription = intent.getStringExtra("weather_description");

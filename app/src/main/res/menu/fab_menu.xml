@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/add_premade_exercise"
-        android:title="Add Premade Exercise" />
+        android:title="@string/add_premade_exercise" />
 
     <item
         android:id="@+id/add_custom_exercise"
-        android:title="Add Custom Exercise" />
+        android:title="@string/add_custom_exercise" />
 </menu>

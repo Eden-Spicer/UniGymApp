@@ -1,9 +1,9 @@
 package com.example.gymapp;
 
 public class Exercise {
-    private String name;
-    private float weight;
-    private int repetitions;
+    private String name;        // the name of the exercise
+    private float weight;       // the weight used for the exercise
+    private int repetitions;    // the number of repetitions performed for the exercise
 
     public Exercise(String name, float weight, int repetitions) {
         this.name = name;

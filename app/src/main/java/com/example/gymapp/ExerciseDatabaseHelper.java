@@ -26,6 +26,7 @@ public class ExerciseDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // Create the database table for premade exercises
         String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
                 + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_NAME + " TEXT, "
@@ -35,7 +36,7 @@ public class ExerciseDatabaseHelper extends SQLiteOpenHelper {
 
         Log.d("TAG", "Inserting premade exercises...");
 
-        // Insert some premade exercises
+        // Insert premade exercises
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, "Bench press");
         values.put(COLUMN_WEIGHT, 20.0);
@@ -83,23 +84,24 @@ public class ExerciseDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Drop the old table and create a new one if the database version has changed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
 
     public void addPremadeExercise(Exercise exercise) {
+        // Add a new premade exercise to the database
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, exercise.getName());
         values.put(COLUMN_WEIGHT, exercise.getWeight());
         values.put(COLUMN_REPETITIONS, exercise.getRepetitions());
-
         db.insert(TABLE_NAME, null, values);
         db.close();
     }
 
     public List<Exercise> getAllPremadeExercises() {
+        // Retrieve all premade exercises from the database
         List<Exercise> exercises = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();

@@ -35,18 +35,22 @@ public class WeatherService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        // Get the user's current location
         FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // If the app doesn't have location permission, return
             return;
         }
         fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
             if (location != null) {
+                // If location is not null, fetch the weather data
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
                 Log.d("WeatherService", "Location fetched: lat=" + latitude + ", lon=" + longitude);
                 fetchWeatherData(latitude, longitude);
             } else {
+                // If location is null, log an error message
                 Log.d("WeatherService", "Location is null");
             }
         });
@@ -72,13 +76,14 @@ public class WeatherService extends IntentService {
                     String responseData = response.body().string();
                     Log.d("WeatherService", "Weather API response: " + responseData);
                     try {
+                        // Parse the weather data from the API response
                         JSONObject jsonObject = new JSONObject(responseData);
                         String weatherDescription = jsonObject.getJSONArray("weather").getJSONObject(0).getString("description");
                         int weatherCode = jsonObject.getJSONArray("weather").getJSONObject(0).getInt("id");
                         double temperature = jsonObject.getJSONObject("main").getDouble("temp");
                         temperature = Math.round(temperature - 273.15); // Convert from Kelvin to Celsius and round off
 
-                        // Send a broadcast to update the CardView in Steps activity
+                        // Send a broadcast to update the CardView in Steps activity with the weather data
                         Intent updateWeatherIntent = new Intent("WEATHER_UPDATED");
                         updateWeatherIntent.putExtra("weather_description", weatherDescription);
                         updateWeatherIntent.putExtra("weather_code", weatherCode);
@@ -90,6 +95,7 @@ public class WeatherService extends IntentService {
                         Log.d("WeatherService", "JSONException while parsing weather API response");
                     }
                 } else {
+                    // If the response is not successful, log an error message
                     Log.d("WeatherService", "Weather API response is not successful");
                 }
             }

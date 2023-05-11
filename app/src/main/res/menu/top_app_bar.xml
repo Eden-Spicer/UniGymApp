@@ -1,19 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
-        android:id="@+id/edit"
-        android:title="@string/edit"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/favorite"
-        android:title="@string/favorite"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/more"
-        android:title="@string/more"
-        app:showAsAction="never" />
-
+        android:id="@+id/action_image"
+        android:title="@string/menu_image"
+        app:showAsAction="always"
+        app:actionLayout="@layout/menu_item_image"/>
 </menu>

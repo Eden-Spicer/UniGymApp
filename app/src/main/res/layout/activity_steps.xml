@@ -20,11 +20,12 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             app:subtitle="10,000 steps a day keeps you healthy!"
-            app:subtitleTextAppearance="?attr/textAppearanceTitleSmall"
+            app:subtitleTextAppearance="@style/Toolbar.SubtitleText"
             app:subtitleTextColor="?attr/colorSecondaryContainer"
             app:title="FlexyFrog"
-            app:titleTextAppearance="?attr/textAppearanceHeadlineMedium"
-            app:titleTextColor="?attr/colorSurface"/>
+            app:titleTextAppearance="@style/Toolbar.TitleText"
+            app:titleTextColor="?attr/colorSurface"
+            app:menu="@menu/top_app_bar"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -37,7 +38,9 @@
         app:itemIconTint="?attr/colorOnSurfaceVariant"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:menu="@menu/bottom_navigation_menu" />
+        app:menu="@menu/bottom_navigation_menu"
+        app:itemTextAppearanceActive="@style/TextAppearance.BottomNavigationView"
+        app:itemTextAppearanceInactive="@style/TextAppearance.BottomNavigationView"/>
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/stepBar"
@@ -78,6 +81,16 @@
         android:textSize="30sp"
         android:paddingBottom="10dp"
         android:fontFamily="@font/carlito"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:src="@drawable/froggyflex_rain"
+        app:layout_constraintTop_toBottomOf="@id/weatherCard"
+        app:layout_constraintBottom_toTopOf="@id/step_count_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/weatherCard"

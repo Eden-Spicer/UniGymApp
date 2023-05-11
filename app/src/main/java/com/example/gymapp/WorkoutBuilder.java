@@ -291,74 +291,68 @@ public class WorkoutBuilder extends Fragment {
                 .setNegativeButton(android.R.string.no, null)
                 .show());
 
-        cardView.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                switch (event.getAction()) {
-                    case DragEvent.ACTION_DRAG_STARTED:
-                        // Do nothing
-                        break;
-                    case DragEvent.ACTION_DRAG_ENTERED:
-                    case DragEvent.ACTION_DRAG_EXITED:
-                    case DragEvent.ACTION_DRAG_ENDED:
-                        // Unhighlight the card view when the drag event ends
-                        // Unhighlight the card view when the drag event exits the drop zone
-                        // Highlight the card view to indicate the drop zone
-                        cardView.setCardBackgroundColor(MaterialColors.getColor(cardView, com.google.android.material.R.attr.colorSurface));
-                        break;
-                    case DragEvent.ACTION_DROP:
-                        // Get the item being dragged and its original parent view
-                        View dragView = (View) event.getLocalState();
-                        ViewGroup parent = (ViewGroup) dragView.getParent();
+        cardView.setOnDragListener((v, event) -> {
+            switch (event.getAction()) {
+                case DragEvent.ACTION_DRAG_STARTED:
+                    // Do nothing
+                    break;
+                case DragEvent.ACTION_DRAG_ENTERED:
+                case DragEvent.ACTION_DRAG_EXITED:
+                case DragEvent.ACTION_DRAG_ENDED:
+                    // Unhighlight the card view when the drag event ends
+                    // Unhighlight the card view when the drag event exits the drop zone
+                    // Highlight the card view to indicate the drop zone
+                    cardView.setCardBackgroundColor(MaterialColors.getColor(cardView, com.google.android.material.R.attr.colorSurface));
+                    break;
+                case DragEvent.ACTION_DROP:
+                    // Get the item being dragged and its original parent view
+                    View dragView = (View) event.getLocalState();
+                    ViewGroup parent = (ViewGroup) dragView.getParent();
 
-                        // Remove the item from its original parent and add it to the new parent
-                        parent.removeView(dragView);
+                    // Remove the item from its original parent and add it to the new parent
+                    parent.removeView(dragView);
 
-                        // Find the position to insert the dragged view
-                        int index = -1;
-                        for (int i = 0; i < parent.getChildCount(); i++) {
-                            View child = parent.getChildAt(i);
-                            if (child != cardView) {
-                                // Check if the dragged view is being dropped above or below this child view
-                                if (event.getY() < child.getTop() + child.getHeight() / 2) {
-                                    index = i;
-                                    break;
-                                }
+                    // Find the position to insert the dragged view
+                    int index = -1;
+                    for (int i = 0; i < parent.getChildCount(); i++) {
+                        View child = parent.getChildAt(i);
+                        if (child != cardView) {
+                            // Check if the dragged view is being dropped above or below this child view
+                            if (event.getY() < child.getTop() + child.getHeight() / 2) {
+                                index = i;
+                                break;
                             }
                         }
+                    }
 
-                        // Add the dragged view at the correct position
-                        if (index != -1) {
-                            parent.addView(dragView, index);
-                        } else {
-                            parent.addView(dragView);
-                        }
+                    // Add the dragged view at the correct position
+                    if (index != -1) {
+                        parent.addView(dragView, index);
+                    } else {
+                        parent.addView(dragView);
+                    }
 
-                        // Make the item visible
-                        dragView.setVisibility(View.VISIBLE);
+                    // Make the item visible
+                    dragView.setVisibility(View.VISIBLE);
 
-                        // Update the order of the exercises in the workout list
-                        List<Exercise> newExercisesOrder = new ArrayList<>();
-                        for (int i = 0; i < parent.getChildCount(); i++) {
-                            Exercise exercise1 = (Exercise) parent.getChildAt(i).getTag();
-                            newExercisesOrder.add(exercise1);
-                        }
-                        exercises.clear();
-                        exercises.addAll(newExercisesOrder);
-                        break;
-                }
-                return true;
+                    // Update the order of the exercises in the workout list
+                    List<Exercise> newExercisesOrder = new ArrayList<>();
+                    for (int i = 0; i < parent.getChildCount(); i++) {
+                        Exercise exercise1 = (Exercise) parent.getChildAt(i).getTag();
+                        newExercisesOrder.add(exercise1);
+                    }
+                    exercises.clear();
+                    exercises.addAll(newExercisesOrder);
+                    break;
             }
+            return true;
         });
 
-        cardView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                // Start a drag and drop operation
-                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-                v.startDragAndDrop(null, shadowBuilder, v, 0);
-                return true;
-            }
+        cardView.setOnLongClickListener(v -> {
+            // Start a drag and drop operation
+            View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+            v.startDragAndDrop(null, shadowBuilder, v, 0);
+            return true;
         });
 
         Log.d("WorkoutBuilder", "Added exercise: " + exercise);

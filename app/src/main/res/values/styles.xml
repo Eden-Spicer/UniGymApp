@@ -18,4 +18,21 @@
         <item name="cornerSize">8dp</item>
     </style>
 
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
+
+    <style name="Toolbar.SubtitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:fontFamily">@font/montserrattext</item>
+    </style>
+
+    <style name="TextAppearance.BottomNavigationView" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">@font/montserrattext</item>
+    </style>
+
+    <style name="TextAppearance.App.Default" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">@font/montserrat_medium</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
 </resources>

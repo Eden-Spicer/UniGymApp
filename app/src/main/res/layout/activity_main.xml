@@ -20,12 +20,12 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             app:subtitle="Ready for a workout?"
-            app:subtitleTextAppearance="?attr/textAppearanceTitleSmall"
+            app:subtitleTextAppearance="@style/Toolbar.SubtitleText"
             app:subtitleTextColor="?attr/colorSecondaryContainer"
             app:title="FlexyFrog"
-            app:titleTextAppearance="?attr/textAppearanceHeadlineMedium"
+            app:titleTextAppearance="@style/Toolbar.TitleText"
             app:titleTextColor="?attr/colorSurface"
-            />
+            app:menu="@menu/top_app_bar" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -37,7 +37,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:elevation="10dp"
         app:menu="@menu/bottom_navigation_menu"
-        app:itemIconTint="?attr/colorOnSurfaceVariant"/>
+        app:itemIconTint="?attr/colorOnSurfaceVariant"
+        app:itemTextAppearanceActive="@style/TextAppearance.BottomNavigationView"
+        app:itemTextAppearanceInactive="@style/TextAppearance.BottomNavigationView"/>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
@@ -75,7 +77,7 @@
                         android:id="@+id/mondayImage"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        app:srcCompat="@drawable/neutral_weather"
+                        app:srcCompat="@drawable/monday_gym"
                         android:scaleType="centerCrop"
                         android:contentDescription="@string/weather_card" />
 
@@ -114,7 +116,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        app:srcCompat="@drawable/cloudy_weather"
+                        app:srcCompat="@drawable/tuesday_gym"
                         android:scaleType="centerCrop"
                         android:contentDescription="@string/weather_card" />
 
@@ -153,7 +155,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        app:srcCompat="@drawable/sunny_weather"
+                        app:srcCompat="@drawable/wednesday_gym"
                         android:scaleType="centerCrop"
                         android:contentDescription="@string/weather_card" />
 
@@ -192,7 +194,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        app:srcCompat="@drawable/rainy_weather"
+                        app:srcCompat="@drawable/thursday_gym"
                         android:scaleType="centerCrop"
                         android:contentDescription="@string/weather_card" />
 
@@ -231,7 +233,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        app:srcCompat="@drawable/neutral_weather"
+                        app:srcCompat="@drawable/friday_gym"
                         android:scaleType="centerCrop"
                         android:contentDescription="@string/weather_card" />
 
@@ -270,7 +272,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        app:srcCompat="@drawable/neutral_weather"
+                        app:srcCompat="@drawable/saturday_gym"
                         android:scaleType="centerCrop"
                         android:contentDescription="@string/weather_card" />
 
@@ -310,7 +312,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        app:srcCompat="@drawable/neutral_weather"
+                        app:srcCompat="@drawable/sunday_gym"
                         android:scaleType="centerCrop"
                         android:contentDescription="@string/weather_card" />
 

@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+
         // Setting the layout of this activity
         setContentView(R.layout.activity_main);
 
@@ -52,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Defining card elevation in pixels
-        float elevationDp = 8;
+        float elevationDp = 10;
         float density = getResources().getDisplayMetrics().density;
         float elevationPx = elevationDp * density;
 

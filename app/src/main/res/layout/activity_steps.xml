@@ -90,7 +90,8 @@
         app:layout_constraintTop_toBottomOf="@id/weatherCard"
         app:layout_constraintBottom_toTopOf="@id/step_count_number"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/weatherfrog" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/weatherCard"

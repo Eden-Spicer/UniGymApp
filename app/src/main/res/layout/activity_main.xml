@@ -42,7 +42,6 @@
         app:itemTextAppearanceInactive="@style/TextAppearance.BottomNavigationView"/>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:paddingLeft="10dp"
@@ -74,10 +73,9 @@
 
                     <!-- Media -->
                     <ImageView
-                        android:id="@+id/mondayImage"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        app:srcCompat="@drawable/monday_gym"
+                        app:srcCompat="@drawable/mondaycard_gym"
                         android:scaleType="centerCrop"
                         android:contentDescription="@string/weather_card" />
 
@@ -116,7 +114,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        app:srcCompat="@drawable/tuesday_gym"
+                        app:srcCompat="@drawable/tuesdaycard_gym"
                         android:scaleType="centerCrop"
                         android:contentDescription="@string/weather_card" />
 
@@ -155,7 +153,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        app:srcCompat="@drawable/wednesday_gym"
+                        app:srcCompat="@drawable/wednesdaycard_gym"
                         android:scaleType="centerCrop"
                         android:contentDescription="@string/weather_card" />
 
@@ -194,7 +192,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        app:srcCompat="@drawable/thursday_gym"
+                        app:srcCompat="@drawable/thursdaycard_gym"
                         android:scaleType="centerCrop"
                         android:contentDescription="@string/weather_card" />
 
@@ -233,7 +231,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        app:srcCompat="@drawable/friday_gym"
+                        app:srcCompat="@drawable/fridaycard_gym"
                         android:scaleType="centerCrop"
                         android:contentDescription="@string/weather_card" />
 
@@ -272,7 +270,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        app:srcCompat="@drawable/saturday_gym"
+                        app:srcCompat="@drawable/saturdaycard_gym"
                         android:scaleType="centerCrop"
                         android:contentDescription="@string/weather_card" />
 
@@ -312,7 +310,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        app:srcCompat="@drawable/sunday_gym"
+                        app:srcCompat="@drawable/sundaycard_gym"
                         android:scaleType="centerCrop"
                         android:contentDescription="@string/weather_card" />
 

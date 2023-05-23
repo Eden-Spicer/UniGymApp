@@ -6,7 +6,6 @@
     android:padding="16dp">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_layout_exercise_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/exercise_name">
@@ -26,7 +25,6 @@
         android:baselineAligned="false">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout_exercise_weight"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -43,7 +41,6 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout_exercise_repetitions"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

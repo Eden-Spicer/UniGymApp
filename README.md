@@ -1,4 +1,4 @@
-# UniGymApp
+# Flexy Frog
 Keeping your health in check amidst a hectic schedule is simplified by using FlexyFrog, a userfriendly fitness app. It motivates and coniditions you to keep on track with your personal fitness. Featuring integrated pedometer, workout planning and weather updates.
 
 ![image](https://github.com/Eden-Spicer/UniGymApp/assets/66095804/3f403967-f571-4a98-92ff-845b2b4d8691)
